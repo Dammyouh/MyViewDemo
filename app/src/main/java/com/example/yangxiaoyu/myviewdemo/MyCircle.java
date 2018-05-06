@@ -1,5 +1,9 @@
 package com.example.yangxiaoyu.myviewdemo;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +16,7 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 /**
  * Created by yangxy on 2018/5/4.
@@ -19,52 +24,44 @@ import android.view.View;
 
 public class MyCircle extends View {
 
-
+    private float degree;
     public MyCircle(Context context) {
         super(context);
+        startAnimator();
     }
 
     public MyCircle(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        startAnimator();
     }
 
     public MyCircle(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        startAnimator();
     }
-
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(800, 800);
-//    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         //画的不同颜色的圆形
         Paint paint = new Paint();
-        paint.setColor(Color.RED);
         paint.setStrokeWidth(20f);
         paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setAntiAlias(true);
         RectF rectF = new RectF(100,100,500,500);
-        int degree;
-        for(degree = 0 ;degree <= 360;degree += 15){
-            if(degree <= 15){
-                canvas.drawArc(rectF,0,15,false,paint);
-                Log.d("yxy", "onDraw: "+degree);
-            } else if(degree <= 45){
-                paint.setColor(Color.GREEN);
-                canvas.drawArc(rectF,15,30,false,paint);
-            } else if(degree <= 105){
-                paint.setColor(Color.BLUE);
-                canvas.drawArc(rectF,45,60,false,paint);
-            } else if(degree <= 190){
-                paint.setColor(Color.YELLOW);
-                canvas.drawArc(rectF,105,85,false,paint);
-            } else if(degree < 360 ){
-                paint.setColor(Color.BLACK);
-                canvas.drawArc(rectF,190,170,false,paint);
-            }
+
+        if(degree <= 15){
+            paint.setColor(Color.RED);
+        } else if(degree <= 45){
+            paint.setColor(Color.GREEN);
+        } else if(degree <= 105){
+            paint.setColor(Color.BLUE);
+        } else if(degree <= 190){
+            paint.setColor(Color.YELLOW);
+        } else if(degree < 360 ){
+            paint.setColor(Color.BLACK);
         }
+        canvas.drawArc(rectF,degree,degree,false,paint);
 
         //画字
         Paint textPaint = new Paint();
@@ -83,5 +80,20 @@ public class MyCircle extends View {
         textPaint.setStrokeCap(Paint.Cap.ROUND);
         float points[]= {250,400,300,400,350,400};
         canvas.drawPoints(points,textPaint);
+    }
+
+    public void startAnimator(){
+        ValueAnimator animator = ObjectAnimator.ofFloat(this,"rotation",0,360f);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Log.d("yxy", "onAnimationUpdate: "+animation.getAnimatedValue("rotation"));
+                degree = (float) animation.getAnimatedValue("rotation");
+                postInvalidate();
+            }
+        });
+        animator.setDuration(20000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.start();
     }
 }
