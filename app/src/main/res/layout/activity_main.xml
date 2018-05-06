@@ -6,8 +6,16 @@
     android:gravity="center"
     tools:context="com.example.yangxiaoyu.myviewdemo.MainActivity">
 
+   <Button
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+       android:id="@+id/btn_start"
+       android:text="start"/>
    <com.example.yangxiaoyu.myviewdemo.MyCircle
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content" />
+       android:layout_height="wrap_content"
+       android:layout_below="@id/btn_start"
+       android:id="@+id/my_circle"/>
 
 </RelativeLayout>

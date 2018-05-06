@@ -32,12 +32,19 @@ public class MyCircle extends View {
         super(context, attrs, defStyleAttr);
     }
 
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(800, 800);
+//    }
+
     @Override
     protected void onDraw(Canvas canvas) {
+        //画的不同颜色的圆形
         Paint paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStrokeWidth(20f);
         paint.setStyle(Paint.Style.STROKE);
+        paint.setAntiAlias(true);
         RectF rectF = new RectF(100,100,500,500);
         int degree;
         for(degree = 0 ;degree <= 360;degree += 15){
@@ -59,6 +66,22 @@ public class MyCircle extends View {
             }
         }
 
-
+        //画字
+        Paint textPaint = new Paint();
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(50);
+        textPaint.setColor(Color.BLACK);
+        canvas.drawText("1,453 calories",170,250,textPaint);
+        canvas.drawText("burned",250,300,textPaint);
+        textPaint.setColor(Color.GRAY);
+        textPaint.setTextSize(25);
+        canvas.drawText("Your avg is 2399 calories ",170,350,textPaint);
+        //画一连串的点
+        textPaint.setColor(Color.GRAY);
+        textPaint.setStrokeWidth(15);
+        textPaint.setStyle(Paint.Style.STROKE);
+        textPaint.setStrokeCap(Paint.Cap.ROUND);
+        float points[]= {250,400,300,400,350,400};
+        canvas.drawPoints(points,textPaint);
     }
 }
